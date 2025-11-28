@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Farmer Finance Copilot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <header class="hero">
+    <div class="container hero-content">
+      <div class="hero-text">
+        <h1>Farmer Finance Copilot</h1>
+        <p class="hero-subtitle">
+          AI-powered financial safety tool that helps farmers in Uzbekistan understand profit, risks
+          and safe loan sizes – and helps banks reduce non-performing loans.
+        </p>
+        <a href="#calculator" class="btn-primary">Start Planning</a>
+      </div>
+      <div class="hero-card">
+        <h2>Why it matters</h2>
+        <ul>
+          <li>Farmers often borrow without seeing real profit and risk.</li>
+          <li>Unexpected price or yield drops can lead to debt traps.</li>
+          <li>Banks struggle with manual risk analysis and NPLs.</li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="problem" class="section">
+      <div class="container two-col">
+        <div>
+          <h2>The Problem</h2>
+          <p>
+            Farmers usually calculate their economics roughly or do not calculate at all. They do not see
+            full production costs, realistic profit margins, or what happens if prices or yields decline.
+            At the same time, banks need better tools to understand borrower risk and avoid bad loans.
+          </p>
+          <p>
+            There is no simple, visual, and data-driven tool that connects both sides: farmers and banks.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Key Pain Points</h3>
+          <ul>
+            <li>Hidden costs and over-optimistic income expectations.</li>
+            <li>No simulation of “bad season” scenarios.</li>
+            <li>Borrowing more than a farm can realistically repay.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="calculator" class="section section-alt">
+      <div class="container">
+        <h2>Farm Financial Simulator</h2>
+        <p class="section-subtitle">
+          Fill in basic information about your crop, costs and loan. We will estimate profit,
+          simulate scenarios and show how safe your loan is.
+        </p>
+        <div class="grid">
+          <form id="finance-form" class="card form-card">
+            <h3>Input data</h3>
+            <div class="form-group">
+              <label for="crop">Crop</label>
+              <select id="crop" name="crop">
+                <option value="Tomato">Tomato</option>
+                <option value="Potato">Potato</option>
+                <option value="Wheat">Wheat</option>
+                <option value="Cotton">Cotton</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="area">Area (hectares)</label>
+                <input type="number" id="area" name="area" min="0" step="0.1" value="1" required>
+              </div>
+              <div class="form-group">
+                <label for="yield">Expected yield (tons/ha)</label>
+                <input type="number" id="yield" name="yield" min="0" step="0.1" value="40" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="price">Expected price (UZS/kg)</label>
+                <input type="number" id="price" name="price" min="0" step="100" value="4000" required>
+              </div>
+              <div class="form-group">
+                <label for="seasonMonths">Season length (months)</label>
+                <input type="number" id="seasonMonths" name="seasonMonths" min="1" max="12" value="6" required>
+              </div>
+            </div>
+
+            <h4>Costs (UZS per season)</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="seedCost">Seed / seedlings</label>
+                <input type="number" id="seedCost" name="seedCost" min="0" step="100000" value="3000000">
+              </div>
+              <div class="form-group">
+                <label for="fertilizerCost">Fertilizer & chemicals</label>
+                <input type="number" id="fertilizerCost" name="fertilizerCost" min="0" step="100000" value="4000000">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="laborCost">Labor</label>
+                <input type="number" id="laborCost" name="laborCost" min="0" step="100000" value="3500000">
+              </div>
+              <div class="form-group">
+                <label for="waterCost">Water & energy</label>
+                <input type="number" id="waterCost" name="waterCost" min="0" step="100000" value="1500000">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="otherCost">Other costs (machinery, transport, etc.)</label>
+              <input type="number" id="otherCost" name="otherCost" min="0" step="100000" value="2000000">
+            </div>
+
+            <h4>Loan details</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="loanAmount">Loan amount (UZS)</label>
+                <input type="number" id="loanAmount" name="loanAmount" min="0" step="1000000" value="30000000" required>
+              </div>
+              <div class="form-group">
+                <label for="interestRate">Interest rate (% annual)</label>
+                <input type="number" id="interestRate" name="interestRate" min="0" step="0.1" value="22" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="durationMonths">Loan duration (months)</label>
+              <input type="number" id="durationMonths" name="durationMonths" min="1" max="60" value="24" required>
+            </div>
+
+            <button type="submit" class="btn-primary btn-full">Calculate</button>
+            <p id="form-error" class="error-message" hidden></p>
+          </form>
+
+          <div class="results">
+            <div class="card result-card" id="summary-card">
+              <h3>Summary</h3>
+              <div class="summary-grid">
+                <div>
+                  <span class="label">Expected revenue</span>
+                  <span class="value" id="rev-value">–</span>
+                </div>
+                <div>
+                  <span class="label">Total costs</span>
+                  <span class="value" id="cost-value">–</span>
+                </div>
+                <div>
+                  <span class="label">Net profit (season)</span>
+                  <span class="value" id="profit-value">–</span>
+                </div>
+                <div>
+                  <span class="label">Monthly profit</span>
+                  <span class="value" id="monthly-profit-value">–</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card result-card" id="loan-card">
+              <h3>Loan Safety</h3>
+              <div class="loan-grid">
+                <div>
+                  <span class="label">Monthly payment</span>
+                  <span class="value" id="payment-value">–</span>
+                </div>
+                <div>
+                  <span class="label">DSCR score</span>
+                  <span class="value" id="dscr-value">–</span>
+                </div>
+                <div>
+                  <span class="label">Risk level</span>
+                  <span class="badge" id="risk-badge">–</span>
+                </div>
+              </div>
+              <p class="explanation" id="explanation-text">
+                Fill in the form and press “Calculate” to see loan safety and explanation.
+              </p>
+            </div>
+
+            <div class="card">
+              <h3>Price sensitivity</h3>
+              <p class="small-muted">
+                How profit changes if market price goes up or down.
+              </p>
+              <canvas id="priceChart" height="200"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap" class="section">
+      <div class="container">
+        <h2>Roadmap</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <h3>Phase 1 – Idea (now)</h3>
+            <p>Define the problem, design the solution, and present the concept website.</p>
+          </div>
+          <div class="timeline-item">
+            <h3>Phase 2 – Prototype</h3>
+            <p>Implement the full calculator, risk model, charts and AI explanations.</p>
+          </div>
+          <div class="timeline-item">
+            <h3>Phase 3 – MVP</h3>
+            <p>Polish UI, test with real sample data, deploy and pitch at the final.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+      <section id="team" class="section section-alt">
+          <div class="container">
+              <h2>Team</h2>
+              <div class="team-grid">
+
+                  <div class="card team-card">
+                      <img src="me.jpg" alt="Xushvaqtov Elshodbek" class="team-photo" />
+                      <h3>Xushvaqtov Elshodbek</h3>
+                      <p class="role">Data Scientist & Software Engineer</p>
+                      <p>
+                          Leads system architecture, core financial modeling, and AI logic.
+                          Responsible for frontend integration, backend API design, and overall product flow.
+                          Skills: Python, FastAPI, ML, Analytics, System Design.
+                      </p>
+                  </div>
+
+                  <div class="card team-card">
+                      <img src="jafar.jpg" alt="Rashidov Abdujafar" class="team-photo" />
+                      <h3>Rashidov Abdujafar</h3>
+                      <p class="role">ML Engineer</p>
+                      <p>
+                          Develops machine learning components, risk scoring logic, and AI-based
+                          explanation systems. Focuses on scenario simulation and model optimization.
+                          Skills: Machine Learning, Statistical Modeling, Python, Data Pipelines.
+                      </p>
+                  </div>
+
+                  <div class="card team-card">
+                      <img src="ozod.jpg" alt="Yuldashaliyev Ozodbeck" class="team-photo" />
+                      <h3>Yuldashaliyev Ozodbeck</h3>
+                      <p class="role">Backend Developer</p>
+                      <p>
+                          Builds and maintains backend infrastructure, API endpoints, and database logic.
+                          Ensures robust server-side performance and secure communication between modules.
+                          Skills: Python, FastAPI, REST APIs, Deployment.
+                      </p>
+                  </div>
+
+              </div>
+          </div>
+      </section>
+
+
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <div>
+        <strong>Farmer Finance Copilot</strong>
+        <p class="small-muted">AI500 Hackathon · Agrobank · 2025</p>
+      </div>
+      <div class="footer-links">
+        <a href="#problem">Problem</a>
+        <a href="#calculator">Calculator</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#team">Team</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
