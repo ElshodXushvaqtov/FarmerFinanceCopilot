@@ -1,1 +1,0 @@
-// paste the JS from the assistant message here if needed
